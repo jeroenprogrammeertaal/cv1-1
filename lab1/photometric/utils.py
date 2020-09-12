@@ -114,18 +114,26 @@ def show_results(albedo, normals, height_map, SE):
     You could further inspect the shape of the objects and normal directions by using plt.quiver() function.  
     =============
     '''
+    X_, Y_, Z_ = np.meshgrid(np.arange(0,512, 1),
+    np.arange(0,512, 1),
+    np.arange(0, 1, 1))
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.quiver(X_,Y_, Z_, normals[:,:,0], normals[:,:,1], normals[:,:, 2])
+    plt.show()
+    
     
     # plotting the SE
-    H = SE[::stride,::stride]
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    ax.plot_surface(X,Y, H.T)
-    plt.show()
+    #H = SE[::stride,::stride]
+    #fig = plt.figure()
+    #ax = fig.gca(projection='3d')
+    #ax.plot_surface(X,Y, H.T)
+    #plt.show()
     
     # plotting model geometry
-    H = height_map[::stride,::stride]
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    ax.plot_surface(X,Y, H.T)
-    plt.show()
+    #H = height_map[::stride,::stride]
+    #fig = plt.figure()
+    #ax = fig.gca(projection='3d')
+    #ax.plot_surface(X,Y, H.T)
+    #plt.show()
 

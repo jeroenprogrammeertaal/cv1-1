@@ -1,4 +1,6 @@
+from __future__ import division
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore')
 
 def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
     
@@ -22,6 +24,8 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
     """
     ================
     Your code here
+    scriptV = (#images, 3)
+    image_stack = (h, w, #images)
     ================
     for each point in the image array
         stack image values into a vector i
@@ -30,7 +34,14 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
         albedo at this point is |g|
         normal at this point is g / |g|
     """
-    
+    for i in range(h):
+       for j in range(w):
+           vec_i = image_stack[i,j,:]
+           #print('vec_i shape: {}'.format(vec_i.shape))
+           g, _, _, _ = np.linalg.lstsq(scriptV, vec_i, rcond=None)
+           norm_sq = np.linalg.norm(g)
+           albedo[i,j] = norm_sq
+           normal[i,j,:] = g/norm_sq     
     return albedo, normal
     
 if __name__ == '__main__':

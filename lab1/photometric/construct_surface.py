@@ -28,6 +28,20 @@ def construct_surface(p, q, path_type='column'):
         %       height_value = previous_height_value + corresponding_p_value
         
         """
+        height_map[0,0] = 0
+        prev_height_value = 0.0
+        for i in range(h):
+            height_map[i,0] = prev_height_value + q[i,0]
+            prev_height_value = height_map[i,0]
+        
+        for i in range(h):
+           prev_height_value = height_map[i,0]
+           for j in range(1, w):
+              height_map[i,j] = prev_height_value + p[i,j]
+              prev_height_value = height_map[i,j]
+            
+
+
     elif path_type=='row':
         """
         ================
