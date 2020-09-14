@@ -1,4 +1,6 @@
+from __future__ import division
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore')
 
 def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
     
@@ -22,6 +24,8 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
     """
     ================
     Your code here
+    scriptV = (#images, 3)
+    image_stack = (h, w, #images)
     ================
     for each point in the image array
         stack image values into a vector i

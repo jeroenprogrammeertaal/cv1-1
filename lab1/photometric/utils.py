@@ -142,8 +142,16 @@ def show_results(albedo, normals, height_map, SE):
     H = SE[::stride,::stride]
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.plot_surface(X,Y, H.T)
+    ax.quiver(X_,Y_, Z_, normals[:,:,0], normals[:,:,1], normals[:,:, 2])
     plt.show()
+    
+    
+    # plotting the SE
+    #H = SE[::stride,::stride]
+    #fig = plt.figure()
+    #ax = fig.gca(projection='3d')
+    #ax.plot_surface(X,Y, H.T)
+    #plt.show()
     
     # plotting model geometry
     H = height_map[::stride,::stride]
