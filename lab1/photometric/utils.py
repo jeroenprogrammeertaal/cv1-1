@@ -40,6 +40,11 @@ def load_syn_images(image_dir='./SphereGray5/', channel=0):
     image_stack = (image_stack - min_val) / (max_val - min_val)
     normV = np.tile(np.sqrt(np.sum(V ** 2, axis=1, keepdims=True)), (1, V.shape[1]))
     scriptV = V / normV
+
+    #use every n-th file.
+    image_stack = image_stack[:,:,1:120:3]
+    scriptV = scriptV[1:120:3,:]
+    print(image_stack.shape, scriptV.shape)
     
     return image_stack, scriptV
     
@@ -88,33 +93,51 @@ def show_results(albedo, normals, height_map, SE):
     albedo_max = albedo.max()
     albedo_max = 1
     albedo = albedo / albedo_max
-    print(albedo.shape)
     plt.imshow(albedo, cmap="gray")
+    plt.xticks([])
+    plt.yticks([])
     plt.show()
     
     # showing normals as three separate channels
-    figure = plt.figure()
+    figure = plt.figure(figsize=(12,4))
     ax1 = figure.add_subplot(131)
+    ax1.set_xticks([])
+    ax1.set_yticks([])
+    ax1.set_title('X component', fontsize=20)
     ax1.imshow(normals[..., 0])
     ax2 = figure.add_subplot(132)
+    ax2.set_title('Y component', fontsize=20)
+    ax2.set_xticks([])
+    ax2.set_yticks([])
     ax2.imshow(normals[..., 1])
     ax3 = figure.add_subplot(133)
+    ax3.set_title('Z component', fontsize=20)
+    ax3.set_xticks([])
+    ax3.set_yticks([])
     ax3.imshow(normals[..., 2])
+    #plt.savefig('normals_25_shadow.png')
     plt.show()
     
     # meshgrid
-    X, Y, _ = np.meshgrid(np.arange(0,np.shape(normals)[0], stride),
+    X, Y, Z = np.meshgrid(np.arange(0,np.shape(normals)[0], stride),
     np.arange(0,np.shape(normals)[1], stride),
-    np.arange(1))
+    np.arange(0,np.shape(height_map)[1], stride))
+
     X = X[..., 0]
     Y = Y[..., 0]
-    
+    Z = Z[..., 0]
     '''
     =============
     You could further inspect the shape of the objects and normal directions by using plt.quiver() function.  
     =============
-    '''
-    
+    '''  
+    U, V, W = normals[:,:,0], normals[:,:,1], normals[:,:,2]
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.quiver(X[::30,::30],Y[::30,::30], height_map[::30,::30], U[::30, ::30],V[::30, ::30], W[::30, ::30], length=5, arrow_length_ratio=0.5)
+    plt.show()
+
     # plotting the SE
     H = SE[::stride,::stride]
     fig = plt.figure()
@@ -126,6 +149,10 @@ def show_results(albedo, normals, height_map, SE):
     H = height_map[::stride,::stride]
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.plot_surface(X,Y, H.T)
+    ax.plot_surface(X,Y, H.T, cmap='gray')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    #plt.savefig("surface_25_col")
     plt.show()
 

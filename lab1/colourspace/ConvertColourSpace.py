@@ -23,19 +23,29 @@ def ConvertColourSpace(input_image, colourspace):
 
     if colourspace.lower() == 'opponent':
         # fill in the rgb2opponent function
+        input_image *= 1./255
         new_image = rgbConversions.rgb2opponent(input_image)
 
     elif colourspace.lower() == 'rgb':
         # fill in the rgb2opponent function
+        input_image *= 1./255
         new_image = rgbConversions.rgb2normedrgb(input_image)
 
     elif colourspace.lower() == 'hsv':
         # use built-in function from opencv
-        pass
+        #input_image *= 1./255
+        new_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2HSV)
 
     elif colourspace.lower() == 'ycbcr':
         # use built-in function from opencv
-        pass
+        input_image *= 1./255
+        new_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2YCrCb)
+        tmp = np.zeros(new_image.shape)
+        # order channels in y cb cr.
+        tmp[:,:,0] = new_image[:,:,0]
+        tmp[:,:,1] = new_image[:,:,2]
+        tmp[:,:,2] = new_image[:,:,1]
+        new_image = tmp
 
     elif colourspace.lower() == 'gray':
         # fill in the rgb2opponent function
@@ -52,11 +62,11 @@ def ConvertColourSpace(input_image, colourspace):
 
 if __name__ == '__main__':
     # Replace the image name with a valid image
-    img_path = 'test.png'
+    img_path = 'mypeppers.png'
     # Read with opencv
     I = cv2.imread(img_path)
     # Convert from BGR to RGB
     # This is a shorthand.
     I = I[:, :, ::-1]
 
-    out_img = ConvertColourSpace(I, 'opponent.png')
+    out_img = ConvertColourSpace(I, 'gray')

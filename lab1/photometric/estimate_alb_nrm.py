@@ -30,7 +30,22 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
         albedo at this point is |g|
         normal at this point is g / |g|
     """
-    
+    if shadow_trick:
+        for y in range(h):
+            for x in range(w):
+                i_xy = image_stack[y,x,:]
+                scriptI = np.diag(i_xy)
+                g = np.linalg.lstsq(scriptI @ scriptV, scriptI @ i_xy, rcond=-1)[0]
+                albedo[y,x] = np.linalg.norm(g)
+                normal[y,x,:] = g / np.linalg.norm(g)
+    else:
+        for y in range(h):
+            for x in range(w):
+                i_xy = image_stack[y,x,:]
+                g = np.linalg.lstsq(scriptV, i_xy, rcond=-1)[0]
+                albedo[y,x] = np.linalg.norm(g)
+                normal[y,x,:] = g / np.linalg.norm(g)
+
     return albedo, normal
     
 if __name__ == '__main__':
