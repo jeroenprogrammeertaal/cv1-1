@@ -84,7 +84,7 @@ def load_face_images(image_dir='./yaleB02/'):
     return image_stack, scriptV
     
     
-def show_results(albedo, normals, height_map, SE):
+def show_results(albedo, normals, height_map, SE, savepath, outliers):
     # Stride in the plot, you may want to adjust it to different images
     stride = 1
     
@@ -115,7 +115,6 @@ def show_results(albedo, normals, height_map, SE):
     ax3.set_xticks([])
     ax3.set_yticks([])
     ax3.imshow(normals[:,:,2])
-    #plt.savefig('normals_25_shadow.png')
     plt.show()
     
     # meshgrid
@@ -144,6 +143,16 @@ def show_results(albedo, normals, height_map, SE):
     ax = fig.gca(projection='3d')
     ax.plot_surface(X,Y, H.T)
     plt.show()
+
+    
+    
+    # plotting the SE
+    H = SE[::stride,::stride]
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.plot_surface(X,Y, H.T)
+    ax.set_title("#Outliers: " + str(outliers))
+    plt.show()
     
     # plotting model geometry
     H = height_map[::stride,::stride]
@@ -153,6 +162,6 @@ def show_results(albedo, normals, height_map, SE):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
-    #plt.savefig("surface_25_col")
+    ax.plot_surface(X,Y, H.T)
     plt.show()
 

@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 
-def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
+def estimate_alb_nrm( image_stack, scriptV, shadow_trick=False):
     
     # COMPUTE_SURFACE_GRADIENT compute the gradient of the surface
     # INPUT:
@@ -34,6 +34,7 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
         albedo at this point is |g|
         normal at this point is g / |g|
     """
+
     if shadow_trick:
         for y in range(h):
             for x in range(w):
