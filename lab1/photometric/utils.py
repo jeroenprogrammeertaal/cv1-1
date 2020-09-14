@@ -84,7 +84,7 @@ def load_face_images(image_dir='./yaleB02/'):
     return image_stack, scriptV
     
     
-def show_results(albedo, normals, height_map, SE, savepath, outliers):
+def show_results(albedo, normals, height_map, SE, outliers):
     # Stride in the plot, you may want to adjust it to different images
     stride = 1
     

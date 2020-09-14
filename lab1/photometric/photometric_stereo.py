@@ -14,9 +14,9 @@ def photometric_stereo(image_dir='./SphereGray5/' ):
     print('Loading images...\n')
     [image_stack, scriptV] = load_syn_images(image_dir)
     [h, w, n] = image_stack.shape
-    print('The shape across dimensions of the image stack: h {}, w {}, n {}'.format(h, w, n))
-    print('The shape of scriptV: {}'.format(scriptV.shape))
-    print('Finish loading %d images.\n' % n)
+    #print('The shape across dimensions of the image stack: h {}, w {}, n {}'.format(h, w, n))
+    #print('The shape of scriptV: {}'.format(scriptV.shape))
+    #print('Finish loading %d images.\n' % n)
 
     # compute the surface gradient from the stack of imgs and light source mat
     print('Computing surface albedo and normal map...\n')
@@ -39,7 +39,7 @@ def photometric_stereo(image_dir='./SphereGray5/' ):
     #np.savetxt('height_map.txt', height_map, fmt='%.18e', delimiter=' ', newline='n')
 
     # # show results
-    show_results(albedo, normals, height_map, SE, './sphereGray5Images', np.sum(SE > threshold))
+    show_results(albedo, normals, height_map, SE, np.sum(SE > threshold))
 
 ## Face
 def photometric_stereo_face(image_dir='./yaleB02/'):
@@ -64,5 +64,5 @@ def photometric_stereo_face(image_dir='./yaleB02/'):
     show_results(albedo, normals, height_map, SE)
     
 if __name__ == '__main__':
-    photometric_stereo('./photometrics_images/MonkeyGray/')
+    photometric_stereo('./photometrics_images/SphereGray5/')
     #photometric_stereo_face()
