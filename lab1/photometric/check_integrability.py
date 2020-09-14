@@ -62,6 +62,7 @@ def check_integrability(normals):
 
 
 
+
     
     #print(p_unroll.shape, q_unroll.shape)
       
@@ -81,9 +82,6 @@ def check_integrability(normals):
 
     SE = (p_2d - q_2d)**2
 
-    #print(p_2d.shape, q_2d.shape, SE.shape)
-    
-    #SE = SE.reshape(normals.shape[:2])
 
     
     return p, q, SE

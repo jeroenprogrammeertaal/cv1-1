@@ -34,28 +34,23 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=False):
         albedo at this point is |g|
         normal at this point is g / |g|
     """
-    for i in range(h):
-       for j in range(w):
-           vec_i = image_stack[i,j,:]
-           if shadow_trick:
-               scriptI = np.diag(vec_i)   
-           else:
-               # print(vec_i.shape)
-               # print(np.ones((vec_i.shape[0])))
-               # print(np.diag(np.ones((vec_i.shape[0],1))))
-               scriptI = np.diag(np.ones((vec_i.shape[0])))
-               # print(scriptI.shape)
-              
-           #print('vec_i shape: {}'.format(vec_i.shape))
-           g, _, _, _ = np.linalg.lstsq(scriptI@scriptV, scriptI@vec_i, rcond=None)
-           norm_sq = np.linalg.norm(g)
-           albedo[i,j] = norm_sq
-           # if norm_sq != 0.0:
-           #      normal[i,j,:] = np.divide(g,norm_sq)
-           # else:
-           #      normal[i,j,:] = g
-           normal[i,j,:] = g/norm_sq
-           #print(g, norm_sq, normal[i,j,:])    
+
+    if shadow_trick:
+        for y in range(h):
+            for x in range(w):
+                i_xy = image_stack[y,x,:]
+                scriptI = np.diag(i_xy)
+                g = np.linalg.lstsq(scriptI @ scriptV, scriptI @ i_xy, rcond=-1)[0]
+                albedo[y,x] = np.linalg.norm(g)
+                normal[y,x,:] = g / np.linalg.norm(g)
+    else:
+        for y in range(h):
+            for x in range(w):
+                i_xy = image_stack[y,x,:]
+                g = np.linalg.lstsq(scriptV, i_xy, rcond=-1)[0]
+                albedo[y,x] = np.linalg.norm(g)
+                normal[y,x,:] = g / np.linalg.norm(g)
+
     return albedo, normal
     
 if __name__ == '__main__':
