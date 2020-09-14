@@ -45,21 +45,8 @@ def check_integrability(normals):
 
     p_2d = np.convolve(p_unroll, np.array([1,-1]), 'same').reshape(normals.shape[:2])
     q_2d = np.convolve(q_unroll, np.array([1,-1]), 'same').reshape(normals.shape[:2])	
-    
-    print(p_unroll.shape, q_unroll.shape)
-      
-    fig, axs = plt.subplots(1,2)
-    axs[0].imshow(p_2d, cmap='gray')
-    axs[0].set_title("dp/dy")
-    axs[1].imshow(q_2d, cmap='gray')
-    axs[1].set_title("dq/dx")
-    plt.show()
-    
 
-    SE = (p_2d - q_2d)**2
-
-    print(p_2d.shape, q_2d.shape, SE.shape)
-    
+    SE = (p_2d - q_2d)**2    
     #SE = SE.reshape(normals.shape[:2])
 
     

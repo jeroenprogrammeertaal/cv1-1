@@ -42,9 +42,9 @@ def load_syn_images(image_dir='./SphereGray5/', channel=0):
     scriptV = V / normV
 
     #use every n-th file.
-    image_stack = image_stack[:,:,1:120:3]
-    scriptV = scriptV[1:120:3,:]
-    print(image_stack.shape, scriptV.shape)
+    #image_stack = image_stack[:,:,1:120:3]
+    #scriptV = scriptV[1:120:3,:]
+    #print(image_stack.shape, scriptV.shape)
     
     return image_stack, scriptV
     
@@ -104,17 +104,17 @@ def show_results(albedo, normals, height_map, SE):
     ax1.set_xticks([])
     ax1.set_yticks([])
     ax1.set_title('X component', fontsize=20)
-    ax1.imshow(normals[..., 0])
+    ax1.imshow(normals[:,:,0])
     ax2 = figure.add_subplot(132)
     ax2.set_title('Y component', fontsize=20)
     ax2.set_xticks([])
     ax2.set_yticks([])
-    ax2.imshow(normals[..., 1])
+    ax2.imshow(normals[:,:,1])
     ax3 = figure.add_subplot(133)
     ax3.set_title('Z component', fontsize=20)
     ax3.set_xticks([])
     ax3.set_yticks([])
-    ax3.imshow(normals[..., 2])
+    ax3.imshow(normals[:,:,2])
     #plt.savefig('normals_25_shadow.png')
     plt.show()
     
@@ -137,21 +137,13 @@ def show_results(albedo, normals, height_map, SE):
     ax = fig.gca(projection='3d')
     ax.quiver(X[::30,::30],Y[::30,::30], height_map[::30,::30], U[::30, ::30],V[::30, ::30], W[::30, ::30], length=5, arrow_length_ratio=0.5)
     plt.show()
-
+    
     # plotting the SE
     H = SE[::stride,::stride]
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.quiver(X_,Y_, Z_, normals[:,:,0], normals[:,:,1], normals[:,:, 2])
+    ax.plot_surface(X,Y, H.T)
     plt.show()
-    
-    
-    # plotting the SE
-    #H = SE[::stride,::stride]
-    #fig = plt.figure()
-    #ax = fig.gca(projection='3d')
-    #ax.plot_surface(X,Y, H.T)
-    #plt.show()
     
     # plotting model geometry
     H = height_map[::stride,::stride]
