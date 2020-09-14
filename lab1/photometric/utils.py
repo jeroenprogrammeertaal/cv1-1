@@ -79,7 +79,7 @@ def load_face_images(image_dir='./yaleB02/'):
     return image_stack, scriptV
     
     
-def show_results(albedo, normals, height_map, SE):
+def show_results(albedo, normals, height_map, SE, savepath, outliers):
     # Stride in the plot, you may want to adjust it to different images
     stride = 1
     
@@ -90,6 +90,7 @@ def show_results(albedo, normals, height_map, SE):
     albedo = albedo / albedo_max
     print(albedo.shape)
     plt.imshow(albedo, cmap="gray")
+    plt.savefig(savepath + '/albedo.png')
     plt.show()
     
     # showing normals as three separate channels
@@ -100,6 +101,7 @@ def show_results(albedo, normals, height_map, SE):
     ax2.imshow(normals[..., 1])
     ax3 = figure.add_subplot(133)
     ax3.imshow(normals[..., 2])
+    plt.savefig(savepath + '/normals.png')
     plt.show()
     
     # meshgrid
@@ -114,26 +116,29 @@ def show_results(albedo, normals, height_map, SE):
     You could further inspect the shape of the objects and normal directions by using plt.quiver() function.  
     =============
     '''
-    X_, Y_, Z_ = np.meshgrid(np.arange(0,512, 1),
-    np.arange(0,512, 1),
-    np.arange(0, 1, 1))
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    ax.quiver(X_,Y_, Z_, normals[:,:,0], normals[:,:,1], normals[:,:, 2])
-    plt.show()
+    #X_, Y_, Z_ = np.meshgrid(np.arange(0,512, 1),
+    #np.arange(0,512, 1),
+    #np.arange(0, 1, 1))
+    #fig = plt.figure()
+    #ax = fig.gca(projection='3d')
+    #ax.quiver(X_,Y_, Z_, normals[:,:,0], normals[:,:,1], normals[:,:, 2])
+    #plt.show()
     
     
     # plotting the SE
-    #H = SE[::stride,::stride]
-    #fig = plt.figure()
-    #ax = fig.gca(projection='3d')
-    #ax.plot_surface(X,Y, H.T)
-    #plt.show()
+    H = SE[::stride,::stride]
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.plot_surface(X,Y, H.T)
+    ax.set_title("#Outliers: " + str(outliers))
+    plt.savefig(savepath + '/SE.png')
+    plt.show()
     
     # plotting model geometry
-    #H = height_map[::stride,::stride]
-    #fig = plt.figure()
-    #ax = fig.gca(projection='3d')
-    #ax.plot_surface(X,Y, H.T)
-    #plt.show()
+    H = height_map[::stride,::stride]
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.plot_surface(X,Y, H.T)
+    plt.savefig(savepath + '/depth.png')
+    plt.show()
 

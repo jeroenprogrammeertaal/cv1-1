@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 
-def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
+def estimate_alb_nrm( image_stack, scriptV, shadow_trick=False):
     
     # COMPUTE_SURFACE_GRADIENT compute the gradient of the surface
     # INPUT:
@@ -37,11 +37,25 @@ def estimate_alb_nrm( image_stack, scriptV, shadow_trick=True):
     for i in range(h):
        for j in range(w):
            vec_i = image_stack[i,j,:]
+           if shadow_trick:
+               scriptI = np.diag(vec_i)   
+           else:
+               # print(vec_i.shape)
+               # print(np.ones((vec_i.shape[0])))
+               # print(np.diag(np.ones((vec_i.shape[0],1))))
+               scriptI = np.diag(np.ones((vec_i.shape[0])))
+               # print(scriptI.shape)
+              
            #print('vec_i shape: {}'.format(vec_i.shape))
-           g, _, _, _ = np.linalg.lstsq(scriptV, vec_i, rcond=None)
+           g, _, _, _ = np.linalg.lstsq(scriptI@scriptV, scriptI@vec_i, rcond=None)
            norm_sq = np.linalg.norm(g)
            albedo[i,j] = norm_sq
-           normal[i,j,:] = g/norm_sq     
+           # if norm_sq != 0.0:
+           #      normal[i,j,:] = np.divide(g,norm_sq)
+           # else:
+           #      normal[i,j,:] = g
+           normal[i,j,:] = g/norm_sq
+           #print(g, norm_sq, normal[i,j,:])    
     return albedo, normal
     
 if __name__ == '__main__':
