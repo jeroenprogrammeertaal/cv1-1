@@ -18,8 +18,6 @@ def grey_world(image):
         for x in range(w):
             new_image[y,x,:] = A @ im[y,x,:]
 
-    print(new_image[:,:,0].mean(), new_image[:,:,1].mean(), new_image[:,:,2].mean())
-
     new_image = new_image / 255
     new_image = new_image.astype(np.float32)
 
