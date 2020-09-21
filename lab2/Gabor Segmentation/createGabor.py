@@ -132,38 +132,6 @@ def createGauss(rot_x, rot_y, gamma, sigma):
     gaussEnv = np.reshape(gaussEnv, (int(np.sqrt(len(gaussEnv))), -1))
     return gaussEnv
 
-def gabor(sigma, theta, Lambda, psi, gamma):
-    """Gabor feature extraction."""
-    sigma_x = sigma
-    sigma_y = float(sigma) / gamma
-
-    # Bounding box
-    nstds = 3  # Number of standard deviation sigma
-    xmax = max(abs(nstds * sigma_x * np.cos(theta)), abs(nstds * sigma_y * np.sin(theta)))
-    xmax = np.ceil(max(1, xmax))
-    ymax = max(abs(nstds * sigma_x * np.sin(theta)), abs(nstds * sigma_y * np.cos(theta)))
-    ymax = np.ceil(max(1, ymax))
-    xmin = -xmax
-    ymin = -ymax
-    (y, x) = np.meshgrid(np.arange(ymin, ymax + 1), np.arange(xmin, xmax + 1))
-    print("x shape: {}, y shape: {}".format(x.shape, y.shape))
-
-    # Rotation
-    x_theta = x * np.cos(theta) + y * np.sin(theta)
-    y_theta = -x * np.sin(theta) + y * np.cos(theta)
-
-    gb_real = np.exp(-.5 * (x_theta ** 2 / sigma_x ** 2 + y_theta ** 2 / sigma_y ** 2)) * np.cos(2 * np.pi / Lambda * x_theta + psi)
-    gb_img = np.exp(-.5 * (x_theta ** 2 / sigma_x ** 2 + y_theta ** 2 / sigma_y ** 2)) * np.sin(2 * np.pi / Lambda * x_theta + psi)
-    print(gb.shape)
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 2, 1)
-    ax.imshow(gb_real)    # Real
-    ax.axis("off")
-    ax = fig.add_subplot(1, 2, 2)
-    ax.imshow(gb_img)    # Real
-    ax.axis("off")
-    plt.show()
-    return gb
 
 
 def plot(exps, exps_config):
