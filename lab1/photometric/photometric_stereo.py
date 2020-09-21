@@ -34,7 +34,7 @@ def photometric_stereo(image_dir='./SphereGray5/' ):
     SE[SE <= threshold] = float('nan') # for good visualization
 
     # # compute the surface height
-    height_map = construct_surface( p, q )
+    height_map = construct_surface( p, q, path_type='column')
     #print('Height_map {}'.format(height_map))
     #np.savetxt('height_map.txt', height_map, fmt='%.18e', delimiter=' ', newline='n')
 
