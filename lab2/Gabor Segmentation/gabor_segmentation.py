@@ -16,6 +16,8 @@ image_id = 'SciencePark' # Identifier to switch between input images.
 if not os.path.exists('./' + str(image_id)):
    os.mkdir('./' + str(image_id))
    plots_path = './' + str(image_id)
+else:
+  plots_path = './' + str(image_id)
 
 # Misc
 err_msg  = 'Image not available.'
